@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Honeypot</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      min-height: 100vh;
+      position: relative;
+      padding-top: 70px; /* space for fixed navbar */
+    }
+
+    /* Particle background */
+    #particles-js {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: #212529;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+    .navbar-nav .nav-link {
+      margin-left: 1rem;
+      font-weight: 500;
+      transition: color 0.3s, transform 0.3s;
+    }
+    .navbar-nav .nav-link:hover {
+      color: #ff4b2b;
+      transform: translateY(-2px);
+    }
+    .navbar-brand {
+      font-size: 1.5rem;
+      color: #ff4b2b;
+      transition: color 0.3s;
+    }
+    .navbar-brand:hover { color: #ff416c; }
+
+    /* Cards */
+    .dashboard-card {
+      background: rgba(30, 30, 30, 0.95);
+      border-radius: 15px;
+      padding: 2rem;
+      text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    }
+    .dashboard-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+    }
+    .dashboard-card h4 {
+      margin-bottom: 1rem;
+      color: #ff4b2b;
+    }
+    .dashboard-card .btn {
+      border-radius: 50px;
+      font-weight: 500;
+      padding: 0.5rem 1.5rem;
+      transition: 0.3s;
+    }
+    .btn-danger:hover { background: #ff1e1e; }
+    .btn-warning:hover { background: #ffc107cc; color: #212529; }
+
+    /* Container spacing */
+    .dashboard-container { padding: 4rem 2rem; }
+  </style>
+</head>
+<body>
+
+  <!-- Particle Background -->
+  <div id="particles-js"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="{{ url_for('admin') }}">Admin Dashboard</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('hive') }}">Hive (Attack Logs)</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('hack') }}">Hack Simulation</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active text-danger fw-bold" href="{{ url_for('admin') }}">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-warning fw-bold" href="{{ url_for('logout') }}">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Dashboard Content -->
+  <div class="dashboard-container container">
+    <div class="row g-4 justify-content-center">
+      <div class="col-md-5">
+        <div class="dashboard-card">
+          <h4><i class="fas fa-fire"></i> Hive (Attack Logs)</h4>
+          <a href="{{ url_for('hive') }}" class="btn btn-danger">View Logs</a>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <div class="dashboard-card">
+          <h4><i class="fas fa-terminal"></i> Hack Simulation</h4>
+          <a href="{{ url_for('hack') }}" class="btn btn-warning">Go to Hack Panel</a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Discord Integration Section -->
+    <div class="row g-4 justify-content-center mt-4">
+      <div class="col-md-10">
+        <div class="dashboard-card">
+          <h4><i class="fab fa-discord"></i> Discord Integration</h4>
+          <p class="text-muted mb-3">Manage real-time attack notifications</p>
+          
+          <!-- Discord Status -->
+          <div class="mb-3">
+            {% if discord_enabled %}
+              {% if discord_paused %}
+                <span class="badge bg-warning text-dark">
+                  <i class="fas fa-pause"></i> Notifications Paused
+                </span>
+              {% else %}
+                <span class="badge bg-success">
+                  <i class="fas fa-check"></i> Notifications Active
+                </span>
+              {% endif %}
+            {% else %}
+              <span class="badge bg-danger">
+                <i class="fas fa-times"></i> Discord Disabled
+              </span>
+            {% endif %}
+          </div>
+          
+          <div class="row g-3">
+            <div class="col-md-6">
+              <a href="{{ url_for('discord_test') }}" class="btn btn-info w-100">
+                <i class="fas fa-paper-plane"></i> Test Discord Notification
+              </a>
+            </div>
+            <div class="col-md-6">
+              <a href="{{ url_for('discord_summary') }}" class="btn btn-success w-100">
+                <i class="fas fa-chart-bar"></i> Send Daily Summary
+              </a>
+            </div>
+          </div>
+          
+          <!-- Pause/Resume Controls -->
+          <div class="row g-3 mt-2">
+            {% if discord_paused %}
+              <div class="col-md-6">
+                <a href="{{ url_for('discord_resume') }}" class="btn btn-success w-100">
+                  <i class="fas fa-play"></i> Resume Notifications
+                </a>
+              </div>
+            {% else %}
+              <div class="col-md-6">
+                <a href="{{ url_for('discord_pause') }}" class="btn btn-warning w-100">
+                  <i class="fas fa-pause"></i> Pause Notifications
+                </a>
+              </div>
+            {% endif %}
+            <div class="col-md-6">
+              <a href="/test/attacks" class="btn btn-secondary w-100">
+                <i class="fas fa-bug"></i> Test Attack Detection
+              </a>
+            </div>
+          </div>
+          
+          <div class="mt-3">
+            <small class="text-muted">
+              <i class="fas fa-info-circle"></i> 
+              {% if discord_enabled %}
+                Discord webhook is configured. Use pause/resume to control notifications.
+              {% else %}
+                Make sure to set DISCORD_WEBHOOK_URL environment variable for notifications to work.
+              {% endif %}
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS("particles-js", {
+      "particles": {
+        "number": {"value": 80},
+        "color": {"value": "#ffffff"},
+        "shape": {"type": "circle"},
+        "opacity": {"value": 0.3},
+        "size": {"value": 3},
+        "line_linked": {"enable": true, "distance": 120, "color": "#ffffff", "opacity": 0.2, "width": 1},
+        "move": {"enable": true, "speed": 2}
+      }
+    });
+  </script>
+</body>
+</html>

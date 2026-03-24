@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Honeypot</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      min-height: 100vh;
+      scroll-behavior: smooth;
+      position: relative;
+      padding-top: 70px; /* space for fixed navbar */
+    }
+
+    /* Particle background */
+    #particles-js {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: #212529;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    .navbar-nav .nav-link {
+      margin-left: 1rem;
+      font-weight: 500;
+      transition: color 0.3s, transform 0.3s;
+    }
+    .navbar-nav .nav-link:hover {
+      color: #ff4b2b;
+      transform: translateY(-2px);
+    }
+    .navbar-brand {
+      font-size: 1.5rem;
+      color: #ff4b2b;
+      transition: color 0.3s;
+    }
+    .navbar-brand:hover {
+      color: #ff416c;
+    }
+
+    /* Card */
+    .register-card {
+      background: rgba(30, 30, 30, 0.95);
+      padding: 2.5rem 2rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      width: 100%;
+      max-width: 500px;
+      transition: transform 0.3s;
+      margin: auto;
+    }
+    .register-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .register-card h3 {
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: #ff4b2b;
+    }
+
+    .form-control {
+      background: #212529;
+      border: 1px solid #444;
+      color: #fff;
+    }
+    .form-control:focus {
+      background: #212529;
+      border-color: #ff4b2b;
+      color: #fff;
+      box-shadow: none;
+    }
+    
+    .input-group .form-control:first-child {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    
+    .input-group .form-control:last-child {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    
+    .input-group select.form-control {
+      background: #212529;
+      border: 1px solid #444;
+      color: #fff;
+    }
+    
+    .input-group select.form-control:focus {
+      background: #212529;
+      border-color: #ff4b2b;
+      color: #fff;
+      box-shadow: none;
+    }
+
+    .btn-success {
+      background: #28a745;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+    .btn-success:hover {
+      background: #3adb6b;
+    }
+
+    .login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: calc(100vh - 70px);
+      padding: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Particle Background -->
+  <div id="particles-js"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="{{ url_for('index') }}">Honeypot</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="{{ url_for('register') }}">Register</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-danger fw-bold" href="{{ url_for('admin') }}">Admin</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Register Card -->
+  <div class="login-container">
+    <div class="register-card">
+      <h3>Register</h3>
+      <form method="POST">
+        <div class="mb-3">
+          <label>Username</label>
+          <input type="text" class="form-control" name="username" required>
+        </div>
+        <div class="mb-3">
+          <label>Password</label>
+          <input type="password" class="form-control" name="password" required>
+        </div>
+        <div class="mb-3">
+          <label>Email</label>
+          <input type="email" class="form-control" name="email" required>
+        </div>
+        <div class="mb-3">
+          <label>Phone Number</label>
+          <div class="input-group">
+            <select class="form-control" name="country_code" style="max-width: 120px;" required>
+              <option value="+93">🇦🇫 +93</option>
+              <option value="+355">🇦🇱 +355</option>
+              <option value="+213">🇩🇿 +213</option>
+              <option value="+1684">🇦🇸 +1684</option>
+              <option value="+376">🇦🇩 +376</option>
+              <option value="+244">🇦🇴 +244</option>
+              <option value="+1264">🇦🇮 +1264</option>
+              <option value="+672">🇦🇶 +672</option>
+              <option value="+54">🇦🇷 +54</option>
+              <option value="+374">🇦🇲 +374</option>
+              <option value="+297">🇦🇼 +297</option>
+              <option value="+61">🇦🇺 +61</option>
+              <option value="+43">🇦🇹 +43</option>
+              <option value="+994">🇦🇿 +994</option>
+              <option value="+1242">🇧🇸 +1242</option>
+              <option value="+973">🇧🇭 +973</option>
+              <option value="+880">🇧🇩 +880</option>
+              <option value="+1246">🇧🇧 +1246</option>
+              <option value="+375">🇧🇾 +375</option>
+              <option value="+32">🇧🇪 +32</option>
+              <option value="+501">🇧🇿 +501</option>
+              <option value="+229">🇧🇯 +229</option>
+              <option value="+1441">🇧🇲 +1441</option>
+              <option value="+975">🇧🇹 +975</option>
+              <option value="+591">🇧🇴 +591</option>
+              <option value="+387">🇧🇦 +387</option>
+              <option value="+267">🇧🇼 +267</option>
+              <option value="+55">🇧🇷 +55</option>
+              <option value="+246">🇮🇴 +246</option>
+              <option value="+673">🇧🇳 +673</option>
+              <option value="+359">🇧🇬 +359</option>
+              <option value="+226">🇧🇫 +226</option>
+              <option value="+257">🇧🇮 +257</option>
+              <option value="+855">🇰🇭 +855</option>
+              <option value="+237">🇨🇲 +237</option>
+              <option value="+1">🇨🇦 +1</option>
+              <option value="+238">🇨🇻 +238</option>
+              <option value="+1345">🇰🇾 +1345</option>
+              <option value="+236">🇨🇫 +236</option>
+              <option value="+235">🇹🇩 +235</option>
+              <option value="+56">🇨🇱 +56</option>
+              <option value="+86">🇨🇳 +86</option>
+              <option value="+61">🇨🇽 +61</option>
+              <option value="+61">🇨🇨 +61</option>
+              <option value="+57">🇨🇴 +57</option>
+              <option value="+269">🇰🇲 +269</option>
+              <option value="+242">🇨🇬 +242</option>
+              <option value="+243">🇨🇩 +243</option>
+              <option value="+682">🇨🇰 +682</option>
+              <option value="+506">🇨🇷 +506</option>
+              <option value="+225">🇨🇮 +225</option>
+              <option value="+385">🇭🇷 +385</option>
+              <option value="+53">🇨🇺 +53</option>
+              <option value="+357">🇨🇾 +357</option>
+              <option value="+420">🇨🇿 +420</option>
+              <option value="+45">🇩🇰 +45</option>
+              <option value="+253">🇩🇯 +253</option>
+              <option value="+1767">🇩🇲 +1767</option>
+              <option value="+1809">🇩🇴 +1809</option>
+              <option value="+593">🇪🇨 +593</option>
+              <option value="+20">🇪🇬 +20</option>
+              <option value="+503">🇸🇻 +503</option>
+              <option value="+240">🇬🇶 +240</option>
+              <option value="+291">🇪🇷 +291</option>
+              <option value="+372">🇪🇪 +372</option>
+              <option value="+251">🇪🇹 +251</option>
+              <option value="+500">🇫🇰 +500</option>
+              <option value="+298">🇫🇴 +298</option>
+              <option value="+679">🇫🇯 +679</option>
+              <option value="+358">🇫🇮 +358</option>
+              <option value="+33">🇫🇷 +33</option>
+              <option value="+594">🇬🇫 +594</option>
+              <option value="+689">🇵🇫 +689</option>
+              <option value="+241">🇬🇦 +241</option>
+              <option value="+220">🇬🇲 +220</option>
+              <option value="+995">🇬🇪 +995</option>
+              <option value="+49">🇩🇪 +49</option>
+              <option value="+233">🇬🇭 +233</option>
+              <option value="+350">🇬🇮 +350</option>
+              <option value="+30">🇬🇷 +30</option>
+              <option value="+299">🇬🇱 +299</option>
+              <option value="+1473">🇬🇩 +1473</option>
+              <option value="+590">🇬🇵 +590</option>
+              <option value="+1671">🇬🇺 +1671</option>
+              <option value="+502">🇬🇹 +502</option>
+              <option value="+224">🇬🇳 +224</option>
+              <option value="+245">🇬🇼 +245</option>
+              <option value="+592">🇬🇾 +592</option>
+              <option value="+509">🇭🇹 +509</option>
+              <option value="+379">🇻🇦 +379</option>
+              <option value="+504">🇭🇳 +504</option>
+              <option value="+852">🇭🇰 +852</option>
+              <option value="+36">🇭🇺 +36</option>
+              <option value="+354">🇮🇸 +354</option>
+              <option value="+91">🇮🇳 +91</option>
+              <option value="+62">🇮🇩 +62</option>
+              <option value="+98">🇮🇷 +98</option>
+              <option value="+964">🇮🇶 +964</option>
+              <option value="+353">🇮🇪 +353</option>
+              <option value="+972">🇮🇱 +972</option>
+              <option value="+39">🇮🇹 +39</option>
+              <option value="+1876">🇯🇲 +1876</option>
+              <option value="+81">🇯🇵 +81</option>
+              <option value="+962">🇯🇴 +962</option>
+              <option value="+7">🇰🇿 +7</option>
+              <option value="+254">🇰🇪 +254</option>
+              <option value="+686">🇰🇮 +686</option>
+              <option value="+850">🇰🇵 +850</option>
+              <option value="+82">🇰🇷 +82</option>
+              <option value="+965">🇰🇼 +965</option>
+              <option value="+996">🇰🇬 +996</option>
+              <option value="+856">🇱🇦 +856</option>
+              <option value="+371">🇱🇻 +371</option>
+              <option value="+961">🇱🇧 +961</option>
+              <option value="+266">🇱🇸 +266</option>
+              <option value="+231">🇱🇷 +231</option>
+              <option value="+218">🇱🇾 +218</option>
+              <option value="+423">🇱🇮 +423</option>
+              <option value="+370">🇱🇹 +370</option>
+              <option value="+352">🇱🇺 +352</option>
+              <option value="+853">🇲🇴 +853</option>
+              <option value="+389">🇲🇰 +389</option>
+              <option value="+261">🇲🇬 +261</option>
+              <option value="+265">🇲🇼 +265</option>
+              <option value="+60">🇲🇾 +60</option>
+              <option value="+960">🇲🇻 +960</option>
+              <option value="+223">🇲🇱 +223</option>
+              <option value="+356">🇲🇹 +356</option>
+              <option value="+692">🇲🇭 +692</option>
+              <option value="+596">🇲🇶 +596</option>
+              <option value="+222">🇲🇷 +222</option>
+              <option value="+230">🇲🇺 +230</option>
+              <option value="+262">🇾🇹 +262</option>
+              <option value="+52">🇲🇽 +52</option>
+              <option value="+691">🇫🇲 +691</option>
+              <option value="+373">🇲🇩 +373</option>
+              <option value="+377">🇲🇨 +377</option>
+              <option value="+976">🇲🇳 +976</option>
+              <option value="+1664">🇲🇸 +1664</option>
+              <option value="+212">🇲🇦 +212</option>
+              <option value="+258">🇲🇿 +258</option>
+              <option value="+95">🇲🇲 +95</option>
+              <option value="+264">🇳🇦 +264</option>
+              <option value="+674">🇳🇷 +674</option>
+              <option value="+977">🇳🇵 +977</option>
+              <option value="+31">🇳🇱 +31</option>
+              <option value="+599">🇦🇳 +599</option>
+              <option value="+687">🇳🇨 +687</option>
+              <option value="+64">🇳🇿 +64</option>
+              <option value="+505">🇳🇮 +505</option>
+              <option value="+227">🇳🇪 +227</option>
+              <option value="+234">🇳🇬 +234</option>
+              <option value="+683">🇳🇺 +683</option>
+              <option value="+672">🇳🇫 +672</option>
+              <option value="+1670">🇲🇵 +1670</option>
+              <option value="+47">🇳🇴 +47</option>
+              <option value="+968">🇴🇲 +968</option>
+              <option value="+92">🇵🇰 +92</option>
+              <option value="+680">🇵🇼 +680</option>
+              <option value="+970">🇵🇸 +970</option>
+              <option value="+507">🇵🇦 +507</option>
+              <option value="+675">🇵🇬 +675</option>
+              <option value="+595">🇵🇾 +595</option>
+              <option value="+51">🇵🇪 +51</option>
+              <option value="+63">🇵🇭 +63</option>
+              <option value="+64">🇵🇳 +64</option>
+              <option value="+48">🇵🇱 +48</option>
+              <option value="+351">🇵🇹 +351</option>
+              <option value="+1787">🇵🇷 +1787</option>
+              <option value="+974">🇶🇦 +974</option>
+              <option value="+262">🇷🇪 +262</option>
+              <option value="+40">🇷🇴 +40</option>
+              <option value="+7">🇷🇺 +7</option>
+              <option value="+250">🇷🇼 +250</option>
+              <option value="+290">🇸🇭 +290</option>
+              <option value="+1869">🇰🇳 +1869</option>
+              <option value="+1758">🇱🇨 +1758</option>
+              <option value="+508">🇵🇲 +508</option>
+              <option value="+1784">🇻🇨 +1784</option>
+              <option value="+685">🇼🇸 +685</option>
+              <option value="+378">🇸🇲 +378</option>
+              <option value="+239">🇸🇹 +239</option>
+              <option value="+966">🇸🇦 +966</option>
+              <option value="+221">🇸🇳 +221</option>
+              <option value="+381">🇷🇸 +381</option>
+              <option value="+248">🇸🇨 +248</option>
+              <option value="+232">🇸🇱 +232</option>
+              <option value="+65">🇸🇬 +65</option>
+              <option value="+421">🇸🇰 +421</option>
+              <option value="+386">🇸🇮 +386</option>
+              <option value="+677">🇸🇧 +677</option>
+              <option value="+252">🇸🇴 +252</option>
+              <option value="+27">🇿🇦 +27</option>
+              <option value="+500">🇬🇸 +500</option>
+              <option value="+34">🇪🇸 +34</option>
+              <option value="+94">🇱🇰 +94</option>
+              <option value="+249">🇸🇩 +249</option>
+              <option value="+597">🇸🇷 +597</option>
+              <option value="+47">🇸🇯 +47</option>
+              <option value="+268">🇸🇿 +268</option>
+              <option value="+46">🇸🇪 +46</option>
+              <option value="+41">🇨🇭 +41</option>
+              <option value="+963">🇸🇾 +963</option>
+              <option value="+886">🇹🇼 +886</option>
+              <option value="+992">🇹🇯 +992</option>
+              <option value="+255">🇹🇿 +255</option>
+              <option value="+66">🇹🇭 +66</option>
+              <option value="+670">🇹🇱 +670</option>
+              <option value="+228">🇹🇬 +228</option>
+              <option value="+690">🇹🇰 +690</option>
+              <option value="+676">🇹🇴 +676</option>
+              <option value="+1868">🇹🇹 +1868</option>
+              <option value="+216">🇹🇳 +216</option>
+              <option value="+90">🇹🇷 +90</option>
+              <option value="+993">🇹🇲 +993</option>
+              <option value="+1649">🇹🇨 +1649</option>
+              <option value="+688">🇹🇻 +688</option>
+              <option value="+256">🇺🇬 +256</option>
+              <option value="+380">🇺🇦 +380</option>
+              <option value="+971">🇦🇪 +971</option>
+              <option value="+44">🇬🇧 +44</option>
+              <option value="+1">🇺🇸 +1</option>
+              <option value="+598">🇺🇾 +598</option>
+              <option value="+998">🇺🇿 +998</option>
+              <option value="+678">🇻🇺 +678</option>
+              <option value="+58">🇻🇪 +58</option>
+              <option value="+84">🇻🇳 +84</option>
+              <option value="+1284">🇻🇬 +1284</option>
+              <option value="+1340">🇻🇮 +1340</option>
+              <option value="+681">🇼🇫 +681</option>
+              <option value="+212">🇪🇭 +212</option>
+              <option value="+967">🇾🇪 +967</option>
+              <option value="+260">🇿🇲 +260</option>
+              <option value="+263">🇿🇼 +263</option>
+            </select>
+            <input type="tel" class="form-control" name="phone" placeholder="Enter phone number" required>
+          </div>
+          <small class="text-muted">Select your country code and enter your phone number</small>
+        </div>
+        <div class="mb-3">
+          <label>Role</label>
+          <select class="form-control" name="role" required>
+            <option>User</option>
+            <option>Researcher</option>
+            <option>Tester</option>
+          </select>
+        </div>
+        <button class="btn btn-success w-100">Register</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS("particles-js", {
+      "particles": {
+        "number": {"value": 80},
+        "color": {"value": "#ffffff"},
+        "shape": {"type": "circle"},
+        "opacity": {"value": 0.3},
+        "size": {"value": 3},
+        "line_linked": {"enable": true, "distance": 120, "color": "#ffffff", "opacity": 0.2, "width": 1},
+        "move": {"enable": true, "speed": 2}
+      }
+    });
+    
+    // Phone number formatting and validation
+    document.addEventListener('DOMContentLoaded', function() {
+      const phoneInput = document.querySelector('input[name="phone"]');
+      const countrySelect = document.querySelector('select[name="country_code"]');
+      
+      // Format phone number as user types
+      phoneInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+        
+        // Basic formatting based on country code
+        const countryCode = countrySelect.value;
+        if (countryCode === '+1') {
+          // US/Canada format: (XXX) XXX-XXXX
+          if (value.length >= 6) {
+            value = value.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+          } else if (value.length >= 3) {
+            value = value.replace(/(\d{3})(\d{0,3})/, '($1) $2');
+          }
+        } else if (countryCode === '+44') {
+          // UK format: XXXX XXX XXXX
+          if (value.length >= 7) {
+            value = value.replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3');
+          } else if (value.length >= 4) {
+            value = value.replace(/(\d{4})(\d{0,3})/, '$1 $2');
+          }
+        } else if (countryCode === '+91') {
+          // India format: XXXX XXX XXXX
+          if (value.length >= 7) {
+            value = value.replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3');
+          } else if (value.length >= 4) {
+            value = value.replace(/(\d{4})(\d{0,3})/, '$1 $2');
+          }
+        }
+        
+        e.target.value = value;
+      });
+      
+      // Update placeholder based on country code
+      countrySelect.addEventListener('change', function() {
+        const countryCode = this.value;
+        const placeholders = {
+          '+1': 'Enter phone number (e.g., 1234567890)',
+          '+44': 'Enter phone number (e.g., 7123456789)',
+          '+91': 'Enter phone number (e.g., 9876543210)',
+          '+86': 'Enter phone number (e.g., 13812345678)',
+          '+81': 'Enter phone number (e.g., 9012345678)',
+          '+49': 'Enter phone number (e.g., 15123456789)',
+          '+33': 'Enter phone number (e.g., 612345678)',
+          '+39': 'Enter phone number (e.g., 3123456789)',
+          '+34': 'Enter phone number (e.g., 612345678)',
+          '+7': 'Enter phone number (e.g., 9123456789)',
+          '+55': 'Enter phone number (e.g., 11987654321)',
+          '+61': 'Enter phone number (e.g., 412345678)',
+          '+82': 'Enter phone number (e.g., 1012345678)',
+          '+65': 'Enter phone number (e.g., 81234567)',
+          '+60': 'Enter phone number (e.g., 123456789)',
+          '+66': 'Enter phone number (e.g., 812345678)',
+          '+63': 'Enter phone number (e.g., 9123456789)',
+          '+84': 'Enter phone number (e.g., 912345678)',
+          '+62': 'Enter phone number (e.g., 81234567890)',
+          '+880': 'Enter phone number (e.g., 1712345678)',
+          '+92': 'Enter phone number (e.g., 3012345678)',
+          '+93': 'Enter phone number (e.g., 701234567)',
+          '+98': 'Enter phone number (e.g., 9123456789)',
+          '+90': 'Enter phone number (e.g., 5321234567)',
+          '+20': 'Enter phone number (e.g., 1012345678)',
+          '+27': 'Enter phone number (e.g., 821234567)',
+          '+234': 'Enter phone number (e.g., 8012345678)',
+          '+254': 'Enter phone number (e.g., 712345678)',
+          '+212': 'Enter phone number (e.g., 612345678)',
+          '+213': 'Enter phone number (e.g., 551234567)',
+          '+216': 'Enter phone number (e.g., 20123456)',
+          '+218': 'Enter phone number (e.g., 912345678)',
+          '+220': 'Enter phone number (e.g., 3012345)',
+          '+221': 'Enter phone number (e.g., 771234567)',
+          '+222': 'Enter phone number (e.g., 20123456)',
+          '+223': 'Enter phone number (e.g., 70123456)',
+          '+224': 'Enter phone number (e.g., 60123456)',
+          '+225': 'Enter phone number (e.g., 07123456)',
+          '+226': 'Enter phone number (e.g., 70123456)',
+          '+227': 'Enter phone number (e.g., 80123456)',
+          '+228': 'Enter phone number (e.g., 90123456)',
+          '+229': 'Enter phone number (e.g., 60123456)',
+          '+230': 'Enter phone number (e.g., 5123456)',
+          '+231': 'Enter phone number (e.g., 771234567)',
+          '+232': 'Enter phone number (e.g., 25123456)',
+          '+233': 'Enter phone number (e.g., 201234567)',
+          '+235': 'Enter phone number (e.g., 60123456)',
+          '+236': 'Enter phone number (e.g., 70123456)',
+          '+237': 'Enter phone number (e.g., 67123456)',
+          '+238': 'Enter phone number (e.g., 9912345)',
+          '+239': 'Enter phone number (e.g., 9812345)',
+          '+240': 'Enter phone number (e.g., 222123456)',
+          '+241': 'Enter phone number (e.g., 01123456)',
+          '+242': 'Enter phone number (e.g., 06123456)',
+          '+243': 'Enter phone number (e.g., 811234567)',
+          '+244': 'Enter phone number (e.g., 923123456)',
+          '+245': 'Enter phone number (e.g., 9512345)',
+          '+246': 'Enter phone number (e.g., 3801234)',
+          '+248': 'Enter phone number (e.g., 2512345)',
+          '+249': 'Enter phone number (e.g., 912345678)',
+          '+250': 'Enter phone number (e.g., 781234567)',
+          '+251': 'Enter phone number (e.g., 911234567)',
+          '+252': 'Enter phone number (e.g., 611234567)',
+          '+253': 'Enter phone number (e.g., 77123456)',
+          '+255': 'Enter phone number (e.g., 651234567)',
+          '+256': 'Enter phone number (e.g., 701234567)',
+          '+257': 'Enter phone number (e.g., 69123456)',
+          '+258': 'Enter phone number (e.g., 821234567)',
+          '+260': 'Enter phone number (e.g., 971234567)',
+          '+261': 'Enter phone number (e.g., 321234567)',
+          '+262': 'Enter phone number (e.g., 692123456)',
+          '+263': 'Enter phone number (e.g., 771234567)',
+          '+264': 'Enter phone number (e.g., 811234567)',
+          '+265': 'Enter phone number (e.g., 991234567)',
+          '+266': 'Enter phone number (e.g., 50123456)',
+          '+267': 'Enter phone number (e.g., 71123456)',
+          '+268': 'Enter phone number (e.g., 76123456)',
+          '+269': 'Enter phone number (e.g., 3212345)',
+          '+290': 'Enter phone number (e.g., 51234)',
+          '+291': 'Enter phone number (e.g., 7123456)',
+          '+297': 'Enter phone number (e.g., 5612345)',
+          '+298': 'Enter phone number (e.g., 201234)',
+          '+299': 'Enter phone number (e.g., 221234)',
+          '+350': 'Enter phone number (e.g., 57123456)',
+          '+351': 'Enter phone number (e.g., 912345678)',
+          '+352': 'Enter phone number (e.g., 621123456)',
+          '+353': 'Enter phone number (e.g., 851234567)',
+          '+354': 'Enter phone number (e.g., 6612345)',
+          '+355': 'Enter phone number (e.g., 691234567)',
+          '+356': 'Enter phone number (e.g., 99123456)',
+          '+357': 'Enter phone number (e.g., 99123456)',
+          '+358': 'Enter phone number (e.g., 401234567)',
+          '+359': 'Enter phone number (e.g., 871234567)',
+          '+370': 'Enter phone number (e.g., 61234567)',
+          '+371': 'Enter phone number (e.g., 21234567)',
+          '+372': 'Enter phone number (e.g., 5123456)',
+          '+373': 'Enter phone number (e.g., 69123456)',
+          '+374': 'Enter phone number (e.g., 77123456)',
+          '+375': 'Enter phone number (e.g., 291234567)',
+          '+376': 'Enter phone number (e.g., 312345)',
+          '+377': 'Enter phone number (e.g., 612345678)',
+          '+378': 'Enter phone number (e.g., 612345678)',
+          '+380': 'Enter phone number (e.g., 671234567)',
+          '+381': 'Enter phone number (e.g., 601234567)',
+          '+382': 'Enter phone number (e.g., 671234567)',
+          '+383': 'Enter phone number (e.g., 441234567)',
+          '+385': 'Enter phone number (e.g., 912345678)',
+          '+386': 'Enter phone number (e.g., 40123456)',
+          '+387': 'Enter phone number (e.g., 61123456)',
+          '+389': 'Enter phone number (e.g., 70123456)',
+          '+420': 'Enter phone number (e.g., 601234567)',
+          '+421': 'Enter phone number (e.g., 901234567)',
+          '+423': 'Enter phone number (e.g., 661234567)',
+          '+500': 'Enter phone number (e.g., 51234)',
+          '+501': 'Enter phone number (e.g., 6012345)',
+          '+502': 'Enter phone number (e.g., 51234567)',
+          '+503': 'Enter phone number (e.g., 71234567)',
+          '+504': 'Enter phone number (e.g., 91234567)',
+          '+505': 'Enter phone number (e.g., 81234567)',
+          '+506': 'Enter phone number (e.g., 83123456)',
+          '+507': 'Enter phone number (e.g., 61234567)',
+          '+508': 'Enter phone number (e.g., 5512345)',
+          '+509': 'Enter phone number (e.g., 34123456)',
+          '+590': 'Enter phone number (e.g., 690123456)',
+          '+591': 'Enter phone number (e.g., 71234567)',
+          '+592': 'Enter phone number (e.g., 6123456)',
+          '+593': 'Enter phone number (e.g., 991234567)',
+          '+594': 'Enter phone number (e.g., 694123456)',
+          '+595': 'Enter phone number (e.g., 981234567)',
+          '+596': 'Enter phone number (e.g., 696123456)',
+          '+597': 'Enter phone number (e.g., 7123456)',
+          '+598': 'Enter phone number (e.g., 99123456)',
+          '+599': 'Enter phone number (e.g., 9512345)',
+          '+670': 'Enter phone number (e.g., 77123456)',
+          '+672': 'Enter phone number (e.g., 123456)',
+          '+673': 'Enter phone number (e.g., 7123456)',
+          '+674': 'Enter phone number (e.g., 5551234)',
+          '+675': 'Enter phone number (e.g., 70123456)',
+          '+676': 'Enter phone number (e.g., 7712345)',
+          '+677': 'Enter phone number (e.g., 7412345)',
+          '+678': 'Enter phone number (e.g., 7712345)',
+          '+679': 'Enter phone number (e.g., 7012345)',
+          '+680': 'Enter phone number (e.g., 7712345)',
+          '+681': 'Enter phone number (e.g., 7712345)',
+          '+682': 'Enter phone number (e.g., 7712345)',
+          '+683': 'Enter phone number (e.g., 7712345)',
+          '+684': 'Enter phone number (e.g., 7712345)',
+          '+685': 'Enter phone number (e.g., 7712345)',
+          '+686': 'Enter phone number (e.g., 7712345)',
+          '+687': 'Enter phone number (e.g., 7712345)',
+          '+688': 'Enter phone number (e.g., 7712345)',
+          '+689': 'Enter phone number (e.g., 7712345)',
+          '+690': 'Enter phone number (e.g., 7712345)',
+          '+691': 'Enter phone number (e.g., 7712345)',
+          '+692': 'Enter phone number (e.g., 7712345)',
+          '+850': 'Enter phone number (e.g., 1912345678)',
+          '+852': 'Enter phone number (e.g., 51234567)',
+          '+853': 'Enter phone number (e.g., 61234567)',
+          '+855': 'Enter phone number (e.g., 12123456)',
+          '+856': 'Enter phone number (e.g., 201234567)',
+          '+880': 'Enter phone number (e.g., 1712345678)',
+          '+886': 'Enter phone number (e.g., 912345678)',
+          '+960': 'Enter phone number (e.g., 7712345)',
+          '+961': 'Enter phone number (e.g., 71123456)',
+          '+962': 'Enter phone number (e.g., 771234567)',
+          '+963': 'Enter phone number (e.g., 912345678)',
+          '+964': 'Enter phone number (e.g., 771234567)',
+          '+965': 'Enter phone number (e.g., 97123456)',
+          '+966': 'Enter phone number (e.g., 501234567)',
+          '+967': 'Enter phone number (e.g., 771234567)',
+          '+968': 'Enter phone number (e.g., 91234567)',
+          '+970': 'Enter phone number (e.g., 591234567)',
+          '+971': 'Enter phone number (e.g., 501234567)',
+          '+972': 'Enter phone number (e.g., 501234567)',
+          '+973': 'Enter phone number (e.g., 33123456)',
+          '+974': 'Enter phone number (e.g., 33123456)',
+          '+975': 'Enter phone number (e.g., 17123456)',
+          '+976': 'Enter phone number (e.g., 99123456)',
+          '+977': 'Enter phone number (e.g., 9812345678)',
+          '+992': 'Enter phone number (e.g., 917123456)',
+          '+993': 'Enter phone number (e.g., 65123456)',
+          '+994': 'Enter phone number (e.g., 501234567)',
+          '+995': 'Enter phone number (e.g., 551234567)',
+          '+996': 'Enter phone number (e.g., 771234567)',
+          '+998': 'Enter phone number (e.g., 901234567)'
+        };
+        
+        phoneInput.placeholder = placeholders[countryCode] || 'Enter phone number';
+      });
+      
+      // Set initial placeholder
+      countrySelect.dispatchEvent(new Event('change'));
+    });
+  </script>
+</body>
+</html>

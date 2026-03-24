@@ -87,11 +87,93 @@ cd honeypot-security-system
 pip install flask requests
 ```
 
-### 3. Set environment variables (optional)
+### 3. Configure Environment Variables
+
+You can use environment variables directly or a `.env` file for easier management.
+
+#### Option A: Using Environment Variables
 
 ```bash
 export DISCORD_WEBHOOK_URL=your_webhook_url
+export GEMINI_API_KEY=your_gemini_api_key
 ```
+
+#### Option B: Using a `.env` File (Recommended)
+
+1. Install dotenv support:
+
+```bash
+pip install python-dotenv
+```
+
+2. Create a `.env` file in your project root:
+
+```env
+DISCORD_WEBHOOK_URL=your_webhook_url
+GEMINI_API_KEY=your_gemini_api_key
+```
+
+3. Load it in your app (add at the top of your code):
+
+```python
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
+```
+
+⚠️ Add `.env` to your `.gitignore` to keep secrets safe.
+
+````
+
+### 🔑 Setting Up Gemini API Key
+
+1. Go to Google AI Studio: https://aistudio.google.com/app/apikey  
+2. Sign in with your Google account  
+3. Click **"Create API Key"**  
+4. Copy the generated API key  
+
+#### Add it to your project
+
+**Option A: Environment Variable (Recommended)**
+```bash
+export GEMINI_API_KEY=your_api_key_here
+````
+
+**Option B: Directly in Code (Not recommended for public repos)**
+
+```python
+GEMINI_API_KEY = "your_api_key_here"
+```
+
+⚠️ Never expose your API key in public repositories. Use environment variables or a `.env` file.
+
+### 🔔 Setting Up Discord Webhook
+
+1. Open Discord and go to your server
+2. Navigate to **Server Settings → Integrations → Webhooks**
+3. Click **"New Webhook"**
+4. Choose a channel where alerts should be sent
+5. Copy the **Webhook URL**
+
+#### Add it to your project
+
+**Option A: Environment Variable (Recommended)**
+
+```bash
+export DISCORD_WEBHOOK_URL=your_webhook_url_here
+```
+
+**Option B: Directly in Code (Not recommended for public repos)**
+
+```python
+DISCORD_WEBHOOK_URL = "your_webhook_url_here"
+```
+
+⚠️ Keep your webhook URL private. Anyone with it can send messages to your Discord channel.
 
 ### 4. Run the application
 
@@ -155,6 +237,17 @@ Do not use it for illegal activities or deploy it in production without proper s
 ## 🤝 Contributing
 
 Contributions are welcome! Feel free to fork the repo and submit a pull request.
+
+---
+
+## 📦 .env Example
+
+Create a `.env.example` file to help others set up quickly:
+
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
+DISCORD_WEBHOOK_URL=your_discord_webhook_here
+```
 
 ---
 
